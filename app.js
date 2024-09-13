@@ -1,8 +1,14 @@
-const mongoose = require('mongoose')
-const url = 'mongodb://localhost:27017/'
+import mongoose from 'mongoose'
+import express from 'express'
+import cors from 'cors'
+import dotenv from 'dotenv'
+import { test } from './backend/controllers/alumno.controller.js'
+
+dotenv.config()
+
 
 // Connect to MongoDB
-mongoose.connect(url)
+mongoose.connect(process.env.url)
 .then(() => {
         console.log('Connected to MongoDB')
 })
@@ -10,23 +16,11 @@ mongoose.connect(url)
         console.log('Error connecting to MongoDB:', err)
 })
 
-const EsquemaAlumnos = new mongoose.Schema({
-    name: {
-        type: String,
-    },
-    lastName: {
-        type: String,
-    },
-    age: {
-        type: Number,
-    }
-}, {Collection: 'alumnos'} )
+const app = express()
+app.use(cors())
 
-const modeloAlumnos = mongoose.model("Tabla de Alumnos", EsquemaAlumnos)
-
-// Insertar un nuevo alumno
-modeloAlumnos.create({
-    name: "El Lalo",
-    lastName: "Lara",
-    age: 20
+app.listen(4000, ()=> {
+    console.log('Server is running on port 4000')
 })
+
+test()
